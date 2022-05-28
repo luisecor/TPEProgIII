@@ -1,5 +1,5 @@
 
-
+package TPEp1.TPEProgIII.src;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -23,7 +23,7 @@ public class Biblioteca {
 	public void cargarLibros() {
 		LeeYEscribe admin = new LeeYEscribe();
 		BufferedReader archivo = admin.readFile();
-		String csvFile = "D:\\Programacion\\TPE-PARTE1\\assets\\dataset1.csv";
+		String csvFile = "C:\\Users\\peter\\eclipse-workspace\\Prog3\\src\\TPEp1\\TPEProgIII\\assets\\dataset1.csv";
         String line = "";
 
         try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
@@ -48,7 +48,7 @@ public class Biblioteca {
 								this.addGeneroOrdenado(tmp);
 							}
 							else {
-								this.agregarLibroAGenero(genero, libro);
+								this.agregarLibroAGenero(tmp, libro);
 							}
 						}
 		                libros.add(libro);
@@ -69,33 +69,31 @@ public class Biblioteca {
 		
 	}
 
-	private void agregarLibroAGenero(String genero, Libro libro) {
-		if(generos.contains(genero)) {//VERIFICAR generos son clase Genero, y el dato es String
+	private void agregarLibroAGenero(Genero genero, Libro libro) {
+		if(generos.contains(genero)) {
 			int i = generos.indexOf(genero);
-			this.generos.get(i).addLibro(libro);
+			generos.get(i).addLibro(libro);
 		}
 		
 	}
 
 	private void addGeneroOrdenado(Genero g) {
-		/*if (this.generos!=null) {
-			int i=0;
-			while(generos.get(i).compareTo(g)<0) {
-				i++;
+		if (!generos.isEmpty()) {
+			if(!generos.contains(g)) {
+				int i=0;
+				while(i<generos.size() && generos.get(i).compareTo(g)<0) {//O(n)
+					i++;
+				}
+				if (i==generos.size()) {
+					generos.add(g);
+				}
+				generos.add(i, g);
 			}
-			generos.add(i, g);
-			} else {
-				generos.add(g);
-			}*/
-			
-			if (generos!=null && !generos.contains(g)) {
-				generos.add(g);
-			} 			
-			
-			Collections.sort(generos);
+		} 
+		else {
+			generos.add(g);
 		}
-		
-		
+	}
 	
 	
 	

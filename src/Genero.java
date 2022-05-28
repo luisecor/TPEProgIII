@@ -1,5 +1,5 @@
 
-
+package TPEp1.TPEProgIII.src;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -25,8 +25,6 @@ public class Genero implements Comparable<Genero>{
 	public ArrayList<Libro> getLibros(){
 		return new ArrayList<Libro>(libros);
 	}
-
-
 
 	@Override
 	public boolean equals(Object obj) {
