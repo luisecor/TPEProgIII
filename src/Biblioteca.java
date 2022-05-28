@@ -69,7 +69,7 @@ public class Biblioteca {
 		
 	}
 
-	private void agregarLibroAGenero(Genero genero, Libro libro) {
+	private void agregarLibroAGenero(Genero genero, Libro libro) {//si el Genero tiene una LinkedList es O(1), si usamos ArrayList es O(n)
 		if(generos.contains(genero)) {
 			int i = generos.indexOf(genero);
 			generos.get(i).addLibro(libro);
@@ -78,25 +78,20 @@ public class Biblioteca {
 	}
 
 	private void addGeneroOrdenado(Genero g) {
-		if (!generos.isEmpty()) {
-			if(!generos.contains(g)) {
-				int i=0;
-				while(i<generos.size() && generos.get(i).compareTo(g)<0) {//O(n)
-					i++;
-				}
-				if (i==generos.size()) {
-					generos.add(g);
-				}
-				generos.add(i, g);
+		if (!generos.isEmpty() && !generos.contains(g)) {
+			int i=0;
+			while(i<generos.size() && generos.get(i).compareTo(g)<0) {//O(n)
+				i++;
 			}
+			if (i==generos.size()) {
+				generos.add(g);
+			}
+			generos.add(i, g);
 		} 
 		else {
 			generos.add(g);
 		}
 	}
-	
-	
-	
 
 	public static void main (String[] args) {
 		Biblioteca B = new Biblioteca();

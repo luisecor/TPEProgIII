@@ -6,6 +6,8 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 public class LeeYEscribe {
 
@@ -22,7 +24,7 @@ public class LeeYEscribe {
 		return null;
 	}
 	
-	public void writteFile(ArrayList<Libro> libros) {
+	public void writteFile(List<Libro> libros) {
 		BufferedWriter bw = null;
 		try {
 			File file = new File("C:\\Users\\peter\\eclipse-workspace\\Prog3\\src\\TPEp1\\TPEProgIII\\assets");
@@ -32,8 +34,9 @@ public class LeeYEscribe {
 
 			FileWriter fw = new FileWriter(file);
 			bw = new BufferedWriter(fw);
-
-			for (Libro libro : libros) {
+			Iterator itLibros = libros.iterator();
+			while (itLibros.hasNext()) {
+				Libro libro = (Libro) itLibros.next();
 				String contenidoLinea1 = libro.toString();
 				bw.write(contenidoLinea1);
 				bw.newLine();	
@@ -50,5 +53,4 @@ public class LeeYEscribe {
 			}
 		}
 	}
-
 }

@@ -1,11 +1,13 @@
 
 package TPEp1.TPEProgIII.src;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
 
 public class Genero implements Comparable<Genero>{
 	private String genero;
-	private ArrayList<Libro> libros;
+	private LinkedList<Libro> libros;
 	
 	public String getGenero() {
 		String nombre = new String (genero);
@@ -14,12 +16,18 @@ public class Genero implements Comparable<Genero>{
 
 	public Genero(String genero) {
 		this.genero = genero;
-		libros = new ArrayList<>();
+		this.libros = null;
 	}
 
 	public void addLibro(Libro libro) {
-		if(!libros.contains(libro))
-		libros.add(libro);
+		if(libros!=null) {
+			if(!libros.contains(libro))
+				libros.add(libro);
+		}
+		else {
+			this.libros = new LinkedList<>();
+			libros.add(libro);
+		}
 	}
 	
 	public ArrayList<Libro> getLibros(){
@@ -37,7 +45,7 @@ public class Genero implements Comparable<Genero>{
 		Genero other = (Genero) obj;
 		return Objects.equals(genero, other.genero);
 	}
-	
+
 	public int compareTo(Genero g2) {
 		return this.genero.compareTo(g2.genero);
 	}
