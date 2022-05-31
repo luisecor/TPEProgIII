@@ -61,20 +61,38 @@ public class Biblioteca {
         }
 	}
 	
-	public ArrayList<Libro> buscarLibrosPorGenero(String g){
-		
-		//BUSQUEDA BINARIA
-		
-		return libros;
-		
+	public ArrayList<Libro> buscarLibrosPorGenero(String g){ //Modificado 31-05-2022 Lucho
+		Genero tmp = new Genero(g);		
+		int min = 1;
+		int max = generos.size();
+		ArrayList<Libro> resultado = new ArrayList<Libro> ();
+		resultado.addAll(busquedaBinaria(tmp,min,max));
+		 if (resultado!=null)
+			 escribirArchivo(resultado);
+		return resultado ;
 	}
 
-	private void agregarLibroAGenero(Genero genero, Libro libro) {//si el Genero tiene una LinkedList es O(1), si usamos ArrayList es O(n)
-		if(generos.contains(genero)) {
-			int i = generos.indexOf(genero);
-			generos.get(i).addLibro(libro);
+	private ArrayList<Libro> busquedaBinaria(Genero genero, int min, int max){ //Modificado 31-05-2022 Lucho
+		int prom = (max/min)-1;
+		if (prom >= 0) {
+			if (generos.get(prom).compareTo(genero) < 0) {
+				min++;
+				return busquedaBinaria(genero, min, max);			
+			} else if (generos.get(prom).compareTo(genero) > 0) {
+				max--;
+				return busquedaBinaria(genero,min,max);			
+			} else if (generos.get(prom).equals(genero)) {
+				return generos.get(prom).getLibros();
+			}
+			
 		}
 		
+		return null;
+	}
+
+	private void agregarLibroAGenero(Genero genero, Libro libro) { //Modificado 31-05-2022 Lucho
+		int index = this.generos.indexOf(genero);
+		this.generos.get(index).addLibro(libro);
 	}
 
 	private void addGeneroOrdenado(Genero g) {
@@ -91,6 +109,11 @@ public class Biblioteca {
 		else {
 			generos.add(g);
 		}
+	}
+
+	public boolean escribirArchivo(ArrayList<Libro> libros) { //Modificado 31-05-2022
+		LeeYEscribe admin = new LeeYEscribe();
+		return admin.writteFile(libros);
 	}
 
 	public static void main (String[] args) {

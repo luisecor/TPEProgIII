@@ -24,19 +24,23 @@ public class LeeYEscribe {
 		return null;
 	}
 	
-	public void writteFile(List<Libro> libros) {
+	public boolean writteFile(ArrayList<Libro> libros) {
 		BufferedWriter bw = null;
+		
+		LocalDateTime hoy = LocalDateTime.now();
+		DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd-MM-YYYY_HH-mm-ss");
+		String nombre = hoy.format(formato);
+		
 		try {
-			File file = new File("C:\\Users\\peter\\eclipse-workspace\\Prog3\\src\\TPEp1\\TPEProgIII\\assets");
+			File file = new File("D:\\Programacion\\TPE-PARTE1\\assets\\nuevos\\"+nombre.toString()+".csv");
 			if (!file.exists()) {
 				file.createNewFile();
 			}
 
 			FileWriter fw = new FileWriter(file);
 			bw = new BufferedWriter(fw);
-			Iterator itLibros = libros.iterator();
-			while (itLibros.hasNext()) {
-				Libro libro = (Libro) itLibros.next();
+
+			for (Libro libro : libros) {
 				String contenidoLinea1 = libro.toString();
 				bw.write(contenidoLinea1);
 				bw.newLine();	
@@ -48,9 +52,12 @@ public class LeeYEscribe {
 			try {
 				if (bw != null)
 					bw.close();
-			} catch (Exception ex) {
+				return true;
+			} catch (final Exception ex) {
 				ex.printStackTrace();
+				return false;
 			}
 		}
 	}
+
 }
