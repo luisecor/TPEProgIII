@@ -1,57 +1,54 @@
-
 package TPEp1.TPEProgIII.src;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-
-
+import java.util.LinkedList;
 
 public class Biblioteca {
-	private ArrayList<Libro> libros;
+	private LinkedList<Libro> libros;
 	private ArrayList<Genero> generos;
 	
 	public Biblioteca() {
-		libros = new ArrayList<>();
+		libros = new LinkedList<>();
 		this.generos = new ArrayList<>();
 	}
 	
 	public void cargarLibros() {
 		LeeYEscribe admin = new LeeYEscribe();
 		BufferedReader archivo = admin.readFile();
-		String csvFile = "C:\\Users\\peter\\eclipse-workspace\\Prog3\\src\\TPEp1\\TPEProgIII\\assets\\dataset1.csv";
+		String csvFile = "D:\\Programacion\\TPE-PARTE1\\assets\\dataset4.csv";
         String line = "";
 
         try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
         	int fila = 0;
             while ((line = br.readLine()) != null) {
             	
-           
             	if (fila>0) {
-            		
+            		System.out.println(fila);
 		                String[] items = line.split(",");
             			
 		            
 		                Libro libro = new Libro (items[0], items[1], Integer.parseInt(items[2]));
 		                String[] generos = items[3].split(" ");
 		              
+		                //Que el libro solo tenga STRINGS
+		                //Cotains usa uno a uno
 		                
 		                for (String genero : generos) {
-		                	Genero tmp = new Genero(genero);
-		                	libro.addGenero(tmp);
-							if(!this.generos.contains(tmp)) {
-								tmp.addLibro(libro);
-								this.addGeneroOrdenado(tmp);
+		                	Genero tmp = new Genero(genero);	 //Creo el genero
+		                	libro.addGenero(tmp); 				// Se lo agrego al libro
+							if(!this.generos.contains(tmp)) { 	//Si la biblioteca no tiene el genero (hacer Busqueda Binaria?)
+								tmp.addLibro(libro); 			//Agrego el libro al Genero de la Biblioteca
+								int inicio = 0;
+								int longGeneros = this.generos.size();
+								this.addGeneroOrdenado(tmp, inicio, longGeneros); 	//Agrego el Genero Nuevo a la bilioteca
 							}
 							else {
-								this.agregarLibroAGenero(tmp, libro);
+								this.agregarLibroAGenero(tmp, libro); // Agrego al Genero de La Biblioteca el Nuebo Libro;
 							}
 						}
-		                libros.add(libro);
+		                libros.add(libro); //Libro cargado ok
 		                   
             	}
             	fila++ ;
@@ -61,65 +58,73 @@ public class Biblioteca {
         }
 	}
 	
+	public boolean escribirArchivo(ArrayList<Libro> libros) {
+		LeeYEscribe admin = new LeeYEscribe();
+		return admin.writteFile(libros);
+	}
+	
 	public ArrayList<Libro> buscarLibrosPorGenero(String g){ //Modificado 31-05-2022 Lucho
 		Genero tmp = new Genero(g);		
-		int min = 1;
-		int max = generos.size();
+		int izquierda = 0;
+		int derecha = generos.size()-1;
 		ArrayList<Libro> resultado = new ArrayList<Libro> ();
-		resultado.addAll(busquedaBinaria(tmp,min,max));
-		 if (resultado!=null)
-			 escribirArchivo(resultado);
+		resultado.addAll(busquedaBinaria(tmp,izquierda,derecha));
+//		 if (resultado!=null)
+//			 escribirArchivo(resultado);
 		return resultado ;
 	}
-
-	private ArrayList<Libro> busquedaBinaria(Genero genero, int min, int max){ //Modificado 31-05-2022 Lucho
-		int prom = (max/min)-1;
-		if (prom >= 0) {
-			if (generos.get(prom).compareTo(genero) < 0) {
-				min++;
-				return busquedaBinaria(genero, min, max);			
-			} else if (generos.get(prom).compareTo(genero) > 0) {
-				max--;
-				return busquedaBinaria(genero,min,max);			
-			} else if (generos.get(prom).equals(genero)) {
-				return generos.get(prom).getLibros();
-			}
-			
+	
+	private ArrayList<Libro> busquedaBinaria(Genero genero, int izquierda, int derecha){
+		if (izquierda > derecha) {
+			return null;
+		} else {
+			int mitad = (izquierda + derecha)/2;
+			if (genero.compareTo(this.generos.get(mitad)) > 0) {
+				return busquedaBinaria(genero,mitad +1 , derecha);
+			} else if (genero.compareTo(this.generos.get(mitad)) < 0) {
+				return busquedaBinaria(genero, izquierda, mitad-1);
+			} else 
+				return this.generos.get(mitad).getLibros();
 		}
 		
-		return null;
 	}
+	
 
 	private void agregarLibroAGenero(Genero genero, Libro libro) { //Modificado 31-05-2022 Lucho
 		int index = this.generos.indexOf(genero);
 		this.generos.get(index).addLibro(libro);
 	}
 
-	private void addGeneroOrdenado(Genero g) {
-		if (!generos.isEmpty() && !generos.contains(g)) {
-			int i=0;
-			while(i<generos.size() && generos.get(i).compareTo(g)<0) {//O(n)
-				i++;
+	private void addGeneroOrdenado(Genero g, int izquierda, int derecha) {
+		if (!generos.isEmpty()) {
+			int mitad = (izquierda+derecha)/2;
+			if(generos.get(mitad).compareTo(g)<0) {
+				addGeneroOrdenado(g, izquierda, mitad-1);
+			} else if(generos.get(mitad).compareTo(g)>0) {
+				addGeneroOrdenado(g, mitad+1, derecha); 
+			} else if(izquierda == derecha && generos.get(mitad).compareTo(g)!=0) {
+				generos.add(mitad, g);
 			}
-			if (i==generos.size()) {
-				generos.add(g);
-			}
-			generos.add(i, g);
 		} 
 		else {
 			generos.add(g);
 		}
 	}
-
-	public boolean escribirArchivo(ArrayList<Libro> libros) { //Modificado 31-05-2022
-		LeeYEscribe admin = new LeeYEscribe();
-		return admin.writteFile(libros);
+	
+	
+	@Override
+	public String toString() {
+		return "Cant Libros: " + libros.size() + " Cant G: " + generos.size();
 	}
 
-	public static void main (String[] args) {
-		Biblioteca B = new Biblioteca();
-		B.cargarLibros();
-		System.out.println(B.generos);
-		
-	}
+//	public static void main (String[] args) {
+//		Biblioteca B = new Biblioteca();
+//		B.cargarLibros();
+//		System.out.println(B);
+//		System.out.println(B.generos);
+//////		System.out.println(B.buscarLibrosPorGenero("noexiste"));
+////		System.out.println((B.buscarLibrosPorGenero("noexiste") != null) ? B.buscarLibrosPorGenero("noexiste").size() : 0);
+//		System.out.println(B.buscarLibrosPorGenero("arte"));
+//		
+//	}
 }
