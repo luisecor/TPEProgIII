@@ -1,11 +1,11 @@
 
-package TPEp1.TPEProgIII.src;
+package TPEProgIII.src;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
-public class Genero implements Comparable<Genero>{
+public class Genero {
 	private String genero;
 	private LinkedList<Libro> libros;
 	
@@ -46,8 +46,8 @@ public class Genero implements Comparable<Genero>{
 		return Objects.equals(genero, other.genero);
 	}
 
-	public int compareTo(Genero g2) {
-		return this.genero.compareTo(g2.genero);
+	public int compareTo(String g2) {
+		return this.genero.compareTo(g2);
 	}
 
 	@Override

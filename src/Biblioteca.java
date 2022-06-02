@@ -1,4 +1,4 @@
-package TPEp1.TPEProgIII.src;
+package TPEProgIII.src;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -17,7 +17,7 @@ public class Biblioteca {
 	public void cargarLibros() {
 		LeeYEscribe admin = new LeeYEscribe();
 		BufferedReader archivo = admin.readFile();
-		String csvFile = "D:\\Programacion\\TPE-PARTE1\\assets\\dataset4.csv";
+		String csvFile = "C:\\Users\\peter\\eclipse-workspace\\Prog3\\src\\TPEProgIII\\assets\\dataset4.csv";
         String line = "";
 
         try (BufferedReader br = new BufferedReader(new FileReader(csvFile))) {
@@ -25,7 +25,7 @@ public class Biblioteca {
             while ((line = br.readLine()) != null) {
             	
             	if (fila>0) {
-            		System.out.println(fila);
+
 		                String[] items = line.split(",");
             			
 		            
@@ -36,16 +36,17 @@ public class Biblioteca {
 		                //Cotains usa uno a uno
 		                
 		                for (String genero : generos) {
-		                	Genero tmp = new Genero(genero);	 //Creo el genero
-		                	libro.addGenero(tmp); 				// Se lo agrego al libro
-							if(!this.generos.contains(tmp)) { 	//Si la biblioteca no tiene el genero (hacer Busqueda Binaria?)
+		                		 //Creo el genero
+		                	libro.addGenero(genero); 				// Se lo agrego al libro
+							if(!this.generos.contains(genero)) {
+								Genero tmp = new Genero(genero); //Si la biblioteca no tiene el genero (hacer Busqueda Binaria?)
 								tmp.addLibro(libro); 			//Agrego el libro al Genero de la Biblioteca
 								int inicio = 0;
-								int longGeneros = this.generos.size();
+								int longGeneros = this.generos.size()-1;
 								this.addGeneroOrdenado(tmp, inicio, longGeneros); 	//Agrego el Genero Nuevo a la bilioteca
 							}
 							else {
-								this.agregarLibroAGenero(tmp, libro); // Agrego al Genero de La Biblioteca el Nuebo Libro;
+								this.agregarLibroAGenero(genero, libro); // Agrego al Genero de La Biblioteca el Nuebo Libro;
 							}
 						}
 		                libros.add(libro); //Libro cargado ok
@@ -79,9 +80,9 @@ public class Biblioteca {
 			return null;
 		} else {
 			int mitad = (izquierda + derecha)/2;
-			if (genero.compareTo(this.generos.get(mitad)) > 0) {
+			if (genero.compareTo(this.generos.get(mitad).getGenero()) > 0) {
 				return busquedaBinaria(genero,mitad +1 , derecha);
-			} else if (genero.compareTo(this.generos.get(mitad)) < 0) {
+			} else if (genero.compareTo(this.generos.get(mitad).getGenero()) < 0) {
 				return busquedaBinaria(genero, izquierda, mitad-1);
 			} else 
 				return this.generos.get(mitad).getLibros();
@@ -90,21 +91,24 @@ public class Biblioteca {
 	}
 	
 
-	private void agregarLibroAGenero(Genero genero, Libro libro) { //Modificado 31-05-2022 Lucho
+	private void agregarLibroAGenero(String genero, Libro libro) { //Modificado 31-05-2022 Lucho
 		int index = this.generos.indexOf(genero);
 		this.generos.get(index).addLibro(libro);
 	}
 
 	private void addGeneroOrdenado(Genero g, int izquierda, int derecha) {
 		if (!generos.isEmpty()) {
-			int mitad = (izquierda+derecha)/2;
-			if(generos.get(mitad).compareTo(g)<0) {
-				addGeneroOrdenado(g, izquierda, mitad-1);
-			} else if(generos.get(mitad).compareTo(g)>0) {
-				addGeneroOrdenado(g, mitad+1, derecha); 
-			} else if(izquierda == derecha && generos.get(mitad).compareTo(g)!=0) {
-				generos.add(mitad, g);
+			if (izquierda < derecha) {
+				int mitad = (izquierda+derecha)/2;
+				if(g.compareTo(this.generos.get(mitad).getGenero()) < 0) {
+					addGeneroOrdenado(g, izquierda, mitad-1);
+				} else if(g.compareTo(this.generos.get(mitad).getGenero()) > 0) {
+					addGeneroOrdenado(g, mitad+1, derecha); 
+				}
+			}else if(izquierda == derecha && generos.get(izquierda).compareTo(g.getGenero())!=0) {
+				generos.add(izquierda, g);
 			}
+			
 		} 
 		else {
 			generos.add(g);
@@ -117,14 +121,14 @@ public class Biblioteca {
 		return "Cant Libros: " + libros.size() + " Cant G: " + generos.size();
 	}
 
-//	public static void main (String[] args) {
-//		Biblioteca B = new Biblioteca();
-//		B.cargarLibros();
+	public static void main (String[] args) {
+		Biblioteca B = new Biblioteca();
+		B.cargarLibros();
 //		System.out.println(B);
-//		System.out.println(B.generos);
+		System.out.println(B.generos);
 //////		System.out.println(B.buscarLibrosPorGenero("noexiste"));
 ////		System.out.println((B.buscarLibrosPorGenero("noexiste") != null) ? B.buscarLibrosPorGenero("noexiste").size() : 0);
-//		System.out.println(B.buscarLibrosPorGenero("arte"));
+		System.out.println(B.buscarLibrosPorGenero("arte"));
 //		
-//	}
+	}
 }

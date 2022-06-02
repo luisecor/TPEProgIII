@@ -1,4 +1,4 @@
-package TPEp1.TPEProgIII.src;
+package TPEProgIII.src;
 
 
 
@@ -10,7 +10,7 @@ public class Libro {
 	private String titulo;
 	private String autor;
 	private int paginas;
-	private ArrayList<Genero> generos;
+	private ArrayList<String> generos;
 	
 	
 	public Libro(String titulo, String autor, int paginas) {
@@ -38,14 +38,14 @@ public class Libro {
 	public void setPaginas(int paginas) {
 		this.paginas = paginas;
 	}
-	public ArrayList<Genero> getGeneros() {
+	public ArrayList<String> getGeneros() {
 		return generos;
 	}
-	public void setGeneros(ArrayList<Genero> generos) {
+	public void setGeneros(ArrayList<String> generos) {
 		this.generos = generos;
 	}
 
-	public void addGenero(Genero genero) {
+	public void addGenero(String genero) {
 		this.generos.add(genero);
 		
 	}

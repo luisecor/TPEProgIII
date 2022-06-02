@@ -1,10 +1,12 @@
-package TPEp1.TPEProgIII.src;
+package TPEProgIII.src;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -12,7 +14,7 @@ import java.util.List;
 public class LeeYEscribe {
 
 	public BufferedReader readFile() {
-		String csvFile = "C:\\\\Users\\\\peter\\\\eclipse-workspace\\\\Prog3\\\\src\\\\TPEp1\\\\TPEProgIII\\\\assets\\\\dataset1.csv";
+		String csvFile = "C:\\\\Users\\\\peter\\\\eclipse-workspace\\\\Prog3\\\\src\\\\TPEProgIII\\\\assets\\\\dataset4.csv";
         try {
         	return new BufferedReader(new FileReader(csvFile)); 
            
@@ -32,7 +34,7 @@ public class LeeYEscribe {
 		String nombre = hoy.format(formato);
 		
 		try {
-			File file = new File("D:\\Programacion\\TPE-PARTE1\\assets\\nuevos\\"+nombre.toString()+".csv");
+			File file = new File("C:\\Users\\peter\\eclipse-workspace\\Prog3\\src\\TPEProgIII\\assets\\nuevos\\"+nombre.toString()+".csv");
 			if (!file.exists()) {
 				file.createNewFile();
 			}
